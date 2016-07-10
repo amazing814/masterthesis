@@ -12,9 +12,9 @@ sender_user_connection = np.array([[1, 1], [1, 1]])
 
 file_user_distribution = np.dot(file_sender_distribution, sender_user_connection)
 
-#print(file_user_distribution)
+print(file_user_distribution)
 
-for value in file_user_distribution:
-    print (value)
-
-
+if file_user_distribution.min() == 0:
+    print ('Wrong, plz type in new matrix.')
+    else:
+        print ('Now we can try to bulid the capablitiy table.')
