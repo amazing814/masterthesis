@@ -10,7 +10,7 @@ demands = np.array([[0, 0, 1],
 distribution = np.array([[1, 0, 1],
                          [1, 1, 0],
                          [0, 1, 1]])
-## which file is stored by which user [I*J] matrix
+## which file is stored by which sender [I*J] matrix
 
 
 connection = np.array([[0, 1, 1],
@@ -22,6 +22,6 @@ demands_distribution = np.dot(demands, distribution)
 #[K*I]*[I*J]=[K*J] matrix, the demanded file of user k is stored by which sender
 
 demands_sender = demands_distribution * connection.T
-## [K*J] matrix, which demands can be taken by which user
+## [K*J] matrix, which demands can be taken by which sender
 
 print(demands_sender)
