@@ -4,7 +4,7 @@
 import numpy as np
 
 r"""
-This script outputs the capability table for MSMU system
+This script outputs the capability matrix for MSMU system
 """
 
 class Capability(object):
