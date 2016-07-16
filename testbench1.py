@@ -1,10 +1,13 @@
 import numpy as np
+import copy
 
 from classtestify import Testify
 
 from classcapability import Capability
 
 from classtable import Table
+
+from class2ndmethod import SecondMethod
 
 r"""
 INPUT:
@@ -57,10 +60,10 @@ connection = np.array([[1, 1, 1, 0, 0, 0],
 ##                    [0,0,1,0],
 ##                    [0,0,0,1]])
 ##
-##distribution = np.array([[1,1,1],
-##                         [1,1,1],
-##                         [0,0,0],
-##                         [0,0,0]])
+##distribution = np.array([[1,0,0],
+##                         [1,0,1],
+##                         [0,1,1],
+##                         [0,1,0]])
 ##
 ##connection = np.array([[1,0,0,1],
 ##                       [0,1,1,1],
@@ -78,7 +81,8 @@ demands_sender = a.capability_matrix().tolist()
 b = Table(demands_sender, K, J, M)
 capability_table = b.table_list()
 
-i = 0
-for j in capability_table:
-    print (i,": ", j)
-    i = i+1
+c = SecondMethod(capability_table)
+track = c.assignment_phase() # or track = c.track
+##
+##for i in track:
+##    print(i)
