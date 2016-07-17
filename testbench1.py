@@ -1,4 +1,5 @@
 import numpy as np
+
 import copy
 
 from classtestify import Testify
@@ -9,6 +10,8 @@ from classtable import Table
 
 from class2ndmethod import SecondMethod
 
+from class2Randr import SecondRate
+
 r"""
 INPUT:
 - ''demands'' -- [K*I] matrix: which user is asking for which file
@@ -16,7 +19,8 @@ INPUT:
 - ''connection'' -- [J*K] matrix: which sender is connected to which user
 - ''M'' -- cache size of users
 """
-M=2
+M=1
+
 demands = np.array([[1, 0, 0, 0, 0, 0],
                     [0, 1, 0, 0, 0, 0],
                     [0, 0, 1, 0, 0, 0],
@@ -42,6 +46,8 @@ connection = np.array([[1, 1, 1, 0, 0, 0],
 ##                    [1, 0, 0],
 ##                    [0, 1, 0]])
 
+##M = 1
+##
 ##demands = np.array([[1, 0, 0],
 ##                    [0, 1, 0],
 ##                    [0, 0, 1]])
@@ -55,6 +61,8 @@ connection = np.array([[1, 1, 1, 0, 0, 0],
 ##                       [1,1,0]])
 
 ######################################################
+##M = 1
+##
 ##demands = np.array([[1,0,0,0],
 ##                    [0,1,0,0],
 ##                    [0,0,1,0],
@@ -74,6 +82,7 @@ connection = np.array([[1, 1, 1, 0, 0, 0],
 K = demands.shape[0]
 I = demands.shape[1]
 J = distribution.shape[1]
+t = int(M*K/I)
 
 a = Capability(demands, distribution, connection)
 demands_sender = a.capability_matrix().tolist()
@@ -81,8 +90,13 @@ demands_sender = a.capability_matrix().tolist()
 b = Table(demands_sender, K, J, M)
 capability_table = b.table_list()
 
+# for the 1st method
+
+
+# for the 2nd method
 c = SecondMethod(capability_table)
 track = c.assignment_phase() # or track = c.track
-##
-##for i in track:
-##    print(i)
+
+d = SecondRate(demands_sender, track, t)
+rate_pair_2 = d.required_rate() # [R, r]
+print(rate_pair_2)
