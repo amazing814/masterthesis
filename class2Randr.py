@@ -19,10 +19,13 @@ class SecondRate(object):
     which sender
     - ''track'' -- the dictionary_result of assignment_phase: which delivery_task
     is assigned to which sender_union
+    - ''t'' -- int(M*K/I)
 
     OUTPUT:
-    - ''.R'' -- the maximum required transmission rate of senders (by 2nd method)
-    - ''.r'' -- the maximum required transmission rate through links (by 2nd method)
+    - ''.R_max'' -- the maximum required transmission rate of senders (by 2nd method)
+    - ''.R_min'' -- the minimum required transmission rate of senders
+    - ''.r_max'' -- the maximum required transmission rate through links (by 2nd method)
+    - ''.r_min'' -- the minimum required transmission rate through links (except for 0)
     - ''.user_sender_packets'' -- this matrix tells each user gets how many packets
                                   from each sender, i.e., the required transmission
                                   rate through each link
@@ -40,8 +43,10 @@ class SecondRate(object):
         # the track will be changed in this class, so we use deepcopy to avoid potential damage            
         self.__t = t
 
-        self.R = 0
-        self.r = 0
+        self.R_max = 0
+        self.R_min = 0      
+        self.r_max = 0
+        self.r_min = 0
 
     def required_rate(self):
 
@@ -119,7 +124,8 @@ class SecondRate(object):
             self.sender_packets = self.sender_packets+assignment_result_lang[keys]
 
         ####################################################################
-        self.R = self.sender_packets.max()
+        self.R_max = self.sender_packets.max()
+        self.R_min = self.sender_packets.min()
         ###################################################################
 
         
@@ -157,13 +163,20 @@ class SecondRate(object):
             self.user_sender_packets = self.user_sender_packets + matrix_recorder_help
 
         #######################################################################            
-        self.r = self.user_sender_packets.max()
+        self.r_max = self.user_sender_packets.max()
+
+        min_recorder = 10000
+        for i in self.user_sender_packets:
+            for j in i:
+                if j != 0:
+                    min_recorder = min(min_recorder, j)
+        self.r_min = min_recorder
         #######################################################################
-        T = itertools.combinations(range(K), self.__t)
-        files = [f for f in T]
-        file_size = len(files)
+##        T = itertools.combinations(range(K), self.__t)
+##        files = [f for f in T]
+##        file_size = len(files)
         
-        return ([self.R/file_size, self.r/file_size])
+        return ([self.R_max, self.r_max])
 
 
 if __name__ == "__main__":
@@ -193,3 +206,6 @@ if __name__ == "__main__":
 
     a = SecondRate(demands_sender, track, t)
     b = a.required_rate() # b = [R, r]
+    c = [a.R_min, a.r_min]
+    print('The maximum required transmission rate pair [R, r] is: ', b)
+    print('The minimum required transmission rate pair [R, r] is: ', c)
